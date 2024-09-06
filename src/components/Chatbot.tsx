@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -56,6 +56,10 @@ const Chatbot: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mode, setMode] = useState('basic'); // Basic or Smart mode
 
+    // replace YOUR_GROQ_API_KEY to your api token
+    const url = useMemo(() => mode === 'smart' ? 'https://groq-api.com/send-message' : 'http://127.0.0.1:8000/send-message/', [mode])
+    const headers = useMemo(() => mode === 'smart' ? { Authorization: 'Bearer YOUR_GROQ_API_KEY' } : {}, [mode])
+
     const handleSendMessage = async (message: string) => {
         if (message.trim()) {
             // Add user's message to the chat
@@ -63,9 +67,7 @@ const Chatbot: React.FC = () => {
             setMessages([...messages, newMessage]);
 
             // Send the message to FastAPI backend or Groq LLM API if smart mode
-            const url = mode === 'smart' ? 'https://groq-api.com/send-message' : 'http://127.0.0.1:8000/send-message/';
             const data = { from_user: 'user', text: message };
-            const headers = mode === 'smart' ? { Authorization: 'Bearer YOUR_GROQ_API_KEY' } : {};
 
             try {
                 const response = await axios.post(url, data, { headers });
@@ -107,11 +109,31 @@ const Chatbot: React.FC = () => {
         setMode(event.target.value as string);
     };
 
+    const toggleEditMode = (id: number) => {
+        const updatedMessages = messages.map(msg => msg.id === id ? { ...msg, editable: !msg.editable } : msg)
+        setMessages(updatedMessages);
+    }
+
     // Edit message
-    const handleEditMessage = (id: number) => {
+    const handleEditMessage = async (id: number) => {
+        const index = messages.findIndex(msg => msg.id === id)
         const updatedMessages = messages.map(msg =>
             msg.id === id ? { ...msg, editable: !msg.editable } : msg
         );
+
+        // Send the message to FastAPI backend or Groq LLM API if smart mode
+        const data = { from_user: 'user', text: messages[index]!.text };
+
+        try {
+            const response = await axios.post(url, data, { headers });
+
+            // Add bot's response to the chat
+            const botMessage = response.data.response;
+            updatedMessages[index + 1].text = botMessage
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+
         setMessages(updatedMessages);
     };
 
@@ -206,9 +228,15 @@ const Chatbot: React.FC = () => {
                         </Box>
                         {msg.from !== 'bot' && (
                             <Stack direction="row" gap={1}>
-                                <IconButton size="small" onClick={() => handleEditMessage(msg.id)}>
-                                    {msg.editable ? <SaveIcon /> : <EditIcon />}
-                                </IconButton>
+                                {msg.editable ?
+                                    <IconButton size="small" onClick={() => handleEditMessage(msg.id)}>
+                                        <SaveIcon />
+                                    </IconButton>
+                                    :
+                                    <IconButton size="small" onClick={() => toggleEditMode(msg.id)}>
+                                        <EditIcon />
+                                    </IconButton>
+                                }
                                 <IconButton size="small" onClick={() => handleDeleteMessage(msg.id)}>
                                     <DeleteIcon />
                                 </IconButton>
