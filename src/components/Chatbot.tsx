@@ -1,7 +1,31 @@
 // src/components/Chatbot.tsx
 
 import React, { useState } from 'react';
-import { Button, TextField, Box, Typography, Avatar, Paper } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+
+import {
+    Button,
+    IconButton,
+    TextField,
+    Box,
+    Stack,
+    Typography,
+    Avatar,
+    Paper,
+    InputAdornment
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const StyledButton = styled(Button)({
+    color: '#733DF9',
+    backgroundColor: 'white',
+    borderRadius: '32px',
+    borderColor: '#733DF9',
+    width: 'fit-content',
+    padding: '0 12px'
+});
 
 const Chatbot: React.FC = () => {
     const [messages, setMessages] = useState([
@@ -28,14 +52,15 @@ const Chatbot: React.FC = () => {
             elevation={3}
             style={{
                 padding: 20,
-                maxWidth: 400,
+                maxWidth: 350,
                 position: 'fixed',
                 bottom: 20,
                 right: 20,
                 display: 'flex',
                 flexDirection: 'column',
                 height: '80vh',
-                zIndex: 1000
+                zIndex: 1000,
+                borderRadius: '16px'
             }}
         >
             <Box display="flex" flexDirection="column" alignItems="center">
@@ -72,33 +97,53 @@ const Chatbot: React.FC = () => {
                         </Box>
                     </Box>
                 ))}
-                <Box>
-                    <Button variant="outlined" color="primary">
-                        Create Report
-                    </Button>
-                    <Button variant="outlined" color="primary">
+                <Stack
+                    gap={1}
+                    ml={6}
+                >
+                    <StyledButton variant="outlined" color="primary">
+                        Create Report this month
+                    </StyledButton>
+                    <StyledButton variant="outlined" color="primary">
                         Call Lead
-                    </Button>
-                </Box>
+                    </StyledButton>
+                </Stack>
             </Box>
 
             {/* Input Field and Buttons */}
             <Box mt={2}>
                 <TextField
+                    id="input-with-icon-textfield"
+                    label="Your Questions"
                     fullWidth
-                    variant="outlined"
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <AccountCircle />
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
+                    variant="standard"
                     value={userMessage}
                     onChange={(e) => setUserMessage(e.target.value)}
-                    label="Your message"
-                    InputProps={{
-                        endAdornment:
-                            <Button variant="contained" color="primary" onClick={handleSendMessage}>
-                                Send
-                            </Button>
-                    }}
                 />
+            </Box>
+
+            <Box mt={2}>
                 <Box mt={2} display="flex" justifyContent="space-between">
-                    
+                    <Box>
+
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <IconButton aria-label="delete" size="small">
+                            <SettingsOutlinedIcon fontSize="inherit" />
+                        </IconButton>
+                        <IconButton aria-label="delete" size="small" onClick={handleSendMessage}>
+                            <SendIcon fontSize="inherit" />
+                        </IconButton>
+                    </Box>
                 </Box>
             </Box>
         </Paper>
