@@ -1,46 +1,103 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Chatbot UI Application Documentation
+https://github.com/user-attachments/assets/1a271d37-8fa4-497b-9563-7594721f269d
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Installation and Setup](#installation-and-setup)
+3. [Architecture Overview](#architecture-overview)
+4. [Key Features](#key-features)
+    - [Send a Message](#send-a-message)
+    - [Edit a Message](#edit-a-message)
+    - [Delete a Message](#delete-a-message)
+    - [Chatbot Response](#chatbot-response)
+5. [Technical Details](#technical-details)
+    - [Frontend (React + TypeScript)](#frontend)
+    - [Backend (FastAPI)](#backend)
+    - [Data Persistence and Caching](#data-persistence-and-caching)
+    - [Error Handling and Edge Cases](#error-handling-and-edge-cases)
+6. [Testing Strategy](#testing-strategy)
+7. [Accessibility](#accessibility)
 
-## Available Scripts
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 1. Introduction <a name="introduction"></a>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This application is chat widget that allows users to send, edit, and delete messages to a chatbot. This project uses **React** and **TypeScript** for the frontend, and **Python** with **FastAPI** for the backend.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## 2. Installation and Setup <a name="installation-and-setup"></a>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend Setup:
+1. Clone the repository:
+   \`\`\`bash
+   git clone <repository-url>
+   cd chatbot-ui
+   \`\`\`
 
-### `npm run build`
+2. Install dependencies and run the development server:
+   \`\`\`bash
+   cd frontend
+   npm install
+   npm start
+   \`\`\`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend Setup:
+1. Install Python dependencies and run the FastAPI server:
+   \`\`\`bash
+   cd backend
+   pip install -r requirements.txt
+   uvicorn main:app --reload
+   \`\`\`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 3. Architecture Overview <a name="architecture-overview"></a>
 
-### `npm run eject`
+- **Frontend**: React with TypeScript, handling UI.
+- **Backend**: FastAPI server for handling API requests.
+- **Data Persistence**: Optionally integrates JWT(JSON Web token) for user authentication.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 4. Key Features <a name="key-features"></a>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Send a Message <a name="send-a-message"></a>
+Users can send a message from availaible services offered by the AI agent chatbot.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Edit a Message <a name="edit-a-message"></a>
+Users can edit any message they’ve sent by clicking the **edit** icon next to the message.
 
-## Learn More
+### Delete a Message <a name="delete-a-message"></a>
+Messages can be deleted using the **delete** icon.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Chatbot Response <a name="chatbot-response"></a>
+The backend chatbot responds based on predefined conditions (e.g., responding to "hello" with "Hello! How can I help you?").
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+## 5. Technical Details <a name="technical-details"></a>
+
+### Frontend (React + TypeScript) <a name="frontend"></a>
+- **App.tsx**: Handles user login and token storage. Renders the `Chatbot` component if the user is authenticated.
+- **Chatbot.tsx**: Manages the chat UI and handles sending, editing, and deleting messages.
+- **Login.tsx**: Collects user credentials and sends them to the backend to receive a JWT.
+
+### Backend (FastAPI) <a name="backend"></a>
+- **/token**: Provides user authentication and JWT generation.
+- **/send-message/**: Receives a message and returns a chatbot response based on the message content.
+
+---
+
+## 6. Testing Strategy <a name="testing-strategy"></a>
+Tests are implemented using **pytest** for the backend and **Jest** for the frontend.
+
+## 7 Accessibility <a name="accessibility"></a>
+Setting button to change the color of the ChatWidget, from given colors.
+
+## 8 Enhancements 
+Upon selecting smart mode, Chatbot can leverage LLM with provided API key, after replacing in Chatbot.tsx file, to use RAG based service for the user request.
+
+## Please check the commit history to learn interations.
+
