@@ -25,6 +25,10 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+interface ChatbotProps {
+    token: string;
+  }
+
 const StyledButton = styled(Button)({
     backgroundColor: 'white',
     borderRadius: '32px',
@@ -46,7 +50,7 @@ const CloseButton = styled(IconButton)({
     top: '-12px'
 });
 
-const Chatbot: React.FC = () => {
+const Chatbot: React.FC<ChatbotProps> = ({ token }) => {
     const [messages, setMessages] = useState([
         { id: 1, from: 'bot', text: 'Hi Jane, Amazing how Mosey is simplifying state compliance for businesses across the board!', editable: false },
     ]);
@@ -56,9 +60,11 @@ const Chatbot: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mode, setMode] = useState('basic'); // Basic or Smart mode
 
-    // replace YOUR_GROQ_API_KEY to your api token
-    const url = useMemo(() => mode === 'smart' ? 'https://groq-api.com/send-message' : 'http://127.0.0.1:8000/send-message/', [mode])
-    const headers = useMemo(() => mode === 'smart' ? { Authorization: 'Bearer YOUR_GROQ_API_KEY' } : {}, [mode])
+    // replace OpenSource LLM API KEY to your api token
+    const url = useMemo(() => mode === 'smart' ? '' : 'http://localhost:8000/send-message/', [mode])
+    const headers = useMemo(() => mode === 'smart' ? { Authorization: 'API_KEY' } : {
+        Authorization: `Bearer ${token}`,  // Token should be passed in the Authorization header
+    }, [mode])
 
     const handleSendMessage = async (message: string) => {
         if (message.trim()) {

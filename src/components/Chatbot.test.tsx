@@ -10,7 +10,7 @@ const mockedAxios = axios as jest.Mocked<AxiosStatic>;
 
 describe('Chatbot Component', () => {
     test('renders the chatbot correctly', () => {
-        render(<Chatbot />);
+        render(<Chatbot token="mock-token" />);
 
         // Check if chatbot avatar and title are present
         expect(screen.getByText("Hey👋, I'm Ava")).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe('Chatbot Component', () => {
     });
 
     test('chatbot closes when the close button is clicked', () => {
-        render(<Chatbot />);
+        render(<Chatbot token="mock-token" />);
 
         // Check if the chatbot is initially present
         expect(screen.getByText("Hey👋, I'm Ava")).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Chatbot Component', () => {
     });
 
     test('renders Create Report and Call Lead buttons', () => {
-        render(<Chatbot />);
+        render(<Chatbot token="mock-token" />);
 
         // Check if buttons are present
         expect(screen.getByText('Create Report this month')).toBeInTheDocument();
